@@ -33,7 +33,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "len",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("len-string", "{0} должен быть длиной в {1}", false); err != nil {
+				if err = ut.Add("len-string", "Поле {0} должно быть длиной в {1}", false); err != nil {
 					return
 				}
 
@@ -53,11 +53,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("len-number", "{0} должен быть равен {1}", false); err != nil {
+				if err = ut.Add("len-number", "Поле {0} должно быть равно {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("len-items", "{0} должен содержать {1}", false); err != nil {
+				if err = ut.Add("len-items", "Поле {0} должно содержать {1}", false); err != nil {
 					return
 				}
 
@@ -141,7 +141,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "min",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("min-string", "{0} должен содержать минимум {1}", false); err != nil {
+				if err = ut.Add("min-string", "Поле {0} должно содержать минимум {1}", false); err != nil {
 					return
 				}
 
@@ -161,11 +161,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("min-number", "{0} должен быть больше или равно {1}", false); err != nil {
+				if err = ut.Add("min-number", "Поле {0} должно быть больше или равно {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("min-items", "{0} должен содержать минимум {1}", false); err != nil {
+				if err = ut.Add("min-items", "Поле {0} должно содержать минимум {1}", false); err != nil {
 					return
 				}
 
@@ -248,7 +248,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "max",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("max-string", "{0} должен содержать максимум {1}", false); err != nil {
+				if err = ut.Add("max-string", "Поле {0} должно содержать максимум {1}", false); err != nil {
 					return
 				}
 
@@ -268,11 +268,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("max-number", "{0} должен быть меньше или равно {1}", false); err != nil {
+				if err = ut.Add("max-number", "Поле {0} должно быть меньше или равно {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("max-items", "{0} должен содержать максимум {1}", false); err != nil {
+				if err = ut.Add("max-items", "Поле {0} должно содержать максимум {1}", false); err != nil {
 					return
 				}
 
@@ -386,7 +386,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "lt",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("lt-string", "{0} должен иметь менее {1}", false); err != nil {
+				if err = ut.Add("lt-string", "Поле {0} должно иметь менее {1}", false); err != nil {
 					return
 				}
 
@@ -406,11 +406,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("lt-number", "{0} должен быть менее {1}", false); err != nil {
+				if err = ut.Add("lt-number", "Поле {0} должно быть менее {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("lt-items", "{0} должен содержать менее {1}", false); err != nil {
+				if err = ut.Add("lt-items", "Поле {0} должно содержать менее {1}", false); err != nil {
 					return
 				}
 
@@ -523,7 +523,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "lte",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("lte-string", "{0} должен содержать максимум {1}", false); err != nil {
+				if err = ut.Add("lte-string", "Поле {0} должно содержать максимум {1}", false); err != nil {
 					return
 				}
 
@@ -543,11 +543,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("lte-number", "{0} должен быть менее или равен {1}", false); err != nil {
+				if err = ut.Add("lte-number", "Поле {0} должно быть менее или равно {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("lte-items", "{0} должен содержать максимум {1}", false); err != nil {
+				if err = ut.Add("lte-items", "Поле {0} должно содержать максимум {1}", false); err != nil {
 					return
 				}
 
@@ -659,7 +659,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "gt",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("gt-string", "{0} должен быть длиннее {1}", false); err != nil {
+				if err = ut.Add("gt-string", "Поле {0} должно быть длиннее {1}", false); err != nil {
 					return
 				}
 
@@ -679,11 +679,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("gt-number", "{0} должен быть больше {1}", false); err != nil {
+				if err = ut.Add("gt-number", "Поле {0} должно быть больше {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("gt-items", "{0} должен содержать более {1}", false); err != nil {
+				if err = ut.Add("gt-items", "Поле {0} должно содержать более {1}", false); err != nil {
 					return
 				}
 
@@ -795,7 +795,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag: "gte",
 			customRegisFunc: func(ut ut.Translator) (err error) {
 
-				if err = ut.Add("gte-string", "{0} должен содержать минимум {1}", false); err != nil {
+				if err = ut.Add("gte-string", "Поле {0} должно содержать минимум {1}", false); err != nil {
 					return
 				}
 
@@ -815,11 +815,11 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 					return
 				}
 
-				if err = ut.Add("gte-number", "{0} должен быть больше или равно {1}", false); err != nil {
+				if err = ut.Add("gte-number", "Поле {0} должно быть больше или равно {1}", false); err != nil {
 					return
 				}
 
-				if err = ut.Add("gte-items", "{0} должен содержать минимум {1}", false); err != nil {
+				if err = ut.Add("gte-items", "Поле {0} должно содержать минимум {1}", false); err != nil {
 					return
 				}
 

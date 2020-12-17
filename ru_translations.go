@@ -28,6 +28,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			tag:         "required",
 			translation: "{0} обязательное поле",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag: "len",
@@ -88,6 +99,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				if idx := strings.Index(fe.Param(), "."); idx != -1 {
 					digits = uint64(len(fe.Param()[idx+1:]))
 				}
@@ -112,7 +129,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("len-string", fe.Field(), c)
+					t, err = ut.T("len-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -122,10 +139,10 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("len-items", fe.Field(), c)
+					t, err = ut.T("len-items", fld, c)
 
 				default:
-					t, err = ut.T("len-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("len-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -195,6 +212,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				if idx := strings.Index(fe.Param(), "."); idx != -1 {
 					digits = uint64(len(fe.Param()[idx+1:]))
 				}
@@ -219,7 +242,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("min-string", fe.Field(), c)
+					t, err = ut.T("min-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -229,10 +252,10 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("min-items", fe.Field(), c)
+					t, err = ut.T("min-items", fld, c)
 
 				default:
-					t, err = ut.T("min-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("min-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -303,6 +326,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				if idx := strings.Index(fe.Param(), "."); idx != -1 {
 					digits = uint64(len(fe.Param()[idx+1:]))
 				}
@@ -327,7 +356,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("max-string", fe.Field(), c)
+					t, err = ut.T("max-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -337,10 +366,10 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("max-items", fe.Field(), c)
+					t, err = ut.T("max-items", fld, c)
 
 				default:
-					t, err = ut.T("max-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("max-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -358,7 +387,13 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					fmt.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -369,11 +404,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "ne",
-			translation: "{0} должен быть не равен {1}",
+			translation: "Поле {0} должно быть не равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					fmt.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -445,6 +486,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				fn := func() (err error) {
 
 					if idx := strings.Index(fe.Param(), "."); idx != -1 {
@@ -476,7 +523,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lt-string", fe.Field(), c)
+					t, err = ut.T("lt-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -491,7 +538,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lt-items", fe.Field(), c)
+					t, err = ut.T("lt-items", fld, c)
 
 				case reflect.Struct:
 					if fe.Type() != reflect.TypeOf(time.Time{}) {
@@ -499,7 +546,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lt-datetime", fe.Field())
+					t, err = ut.T("lt-datetime", fld)
 
 				default:
 					err = fn()
@@ -507,7 +554,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lt-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("lt-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -581,6 +628,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				fn := func() (err error) {
 
 					if idx := strings.Index(fe.Param(), "."); idx != -1 {
@@ -612,7 +665,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lte-string", fe.Field(), c)
+					t, err = ut.T("lte-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -627,7 +680,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lte-items", fe.Field(), c)
+					t, err = ut.T("lte-items", fld, c)
 
 				case reflect.Struct:
 					if fe.Type() != reflect.TypeOf(time.Time{}) {
@@ -635,7 +688,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lte-datetime", fe.Field())
+					t, err = ut.T("lte-datetime", fld)
 
 				default:
 					err = fn()
@@ -643,7 +696,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("lte-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("lte-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -717,6 +770,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				fn := func() (err error) {
 
 					if idx := strings.Index(fe.Param(), "."); idx != -1 {
@@ -748,7 +807,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gt-string", fe.Field(), c)
+					t, err = ut.T("gt-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -763,7 +822,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gt-items", fe.Field(), c)
+					t, err = ut.T("gt-items", fld, c)
 
 				case reflect.Struct:
 					if fe.Type() != reflect.TypeOf(time.Time{}) {
@@ -771,7 +830,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gt-datetime", fe.Field())
+					t, err = ut.T("gt-datetime", fld)
 
 				default:
 					err = fn()
@@ -779,7 +838,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gt-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("gt-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -853,6 +912,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				var digits uint64
 				var kind reflect.Kind
 
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
 				fn := func() (err error) {
 
 					if idx := strings.Index(fe.Param(), "."); idx != -1 {
@@ -884,7 +949,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gte-string", fe.Field(), c)
+					t, err = ut.T("gte-string", fld, c)
 
 				case reflect.Slice, reflect.Map, reflect.Array:
 					var c string
@@ -899,7 +964,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gte-items", fe.Field(), c)
+					t, err = ut.T("gte-items", fld, c)
 
 				case reflect.Struct:
 					if fe.Type() != reflect.TypeOf(time.Time{}) {
@@ -907,7 +972,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gte-datetime", fe.Field())
+					t, err = ut.T("gte-datetime", fld)
 
 				default:
 					err = fn()
@@ -915,7 +980,7 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 						goto END
 					}
 
-					t, err = ut.T("gte-number", fe.Field(), ut.FmtNumber(f64, digits))
+					t, err = ut.T("gte-number", fld, ut.FmtNumber(f64, digits))
 				}
 
 			END:
@@ -929,11 +994,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "eqfield",
-			translation: "{0} должен быть равен {1}",
+			translation: "Поле {0} должно быть равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -944,11 +1015,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "eqcsfield",
-			translation: "{0} должен быть равен {1}",
+			translation: "Поле {0} должно быть равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -959,11 +1036,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "necsfield",
-			translation: "{0} не должен быть равен {1}",
+			translation: "{0} не должен быть равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -974,11 +1057,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "gtcsfield",
-			translation: "{0} должен быть больше {1}",
+			translation: "Поле {0} должно быть больше {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -989,11 +1078,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "gtecsfield",
-			translation: "{0} должен быть больше или равен {1}",
+			translation: "Поле {0} должно быть больше или равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1004,11 +1099,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "ltcsfield",
-			translation: "{0} должен быть менее {1}",
+			translation: "Поле {0} должно быть менее {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1019,11 +1120,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "ltecsfield",
-			translation: "{0} должен быть менее или равен {1}",
+			translation: "Поле {0} должно быть менее или равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1034,11 +1141,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "nefield",
-			translation: "{0} не должен быть равен {1}",
+			translation: "Поле {0} не должен быть равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1049,11 +1162,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "gtfield",
-			translation: "{0} должен быть больше {1}",
+			translation: "Поле {0} должно быть больше {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1064,11 +1183,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "gtefield",
-			translation: "{0} должен быть больше или равен {1}",
+			translation: "Поле {0} должно быть больше или равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1079,11 +1204,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "ltfield",
-			translation: "{0} должен быть менее {1}",
+			translation: "Поле {0} должно быть менее {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1094,11 +1225,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "ltefield",
-			translation: "{0} должен быть менее или равен {1}",
+			translation: "Поле {0} должно быть менее или равно {1}",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1109,86 +1246,257 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "alpha",
-			translation: "{0} должен содержать только буквы",
+			translation: "Поле {0} должно содержать только буквы",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "alphanum",
-			translation: "{0} должен содержать только буквы и цифры",
+			translation: "Поле {0} должно содержать только буквы и цифры",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "numeric",
-			translation: "{0} должен быть цифровым значением",
+			translation: "Поле {0} должно быть цифровым значением",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "number",
-			translation: "{0} должен быть цифрой",
+			translation: "Поле {0} должно быть цифрой",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "hexadecimal",
-			translation: "{0} должен быть шестнадцатеричной строкой",
+			translation: "Поле {0} должно быть шестнадцатеричной строкой",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "hexcolor",
-			translation: "{0} должен быть HEX цветом",
+			translation: "Поле {0} должно быть HEX цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "rgb",
-			translation: "{0} должен быть RGB цветом",
+			translation: "Поле {0} должно быть RGB цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "rgba",
-			translation: "{0} должен быть RGBA цветом",
+			translation: "Поле {0} должно быть RGBA цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "hsl",
-			translation: "{0} должен быть HSL цветом",
+			translation: "Поле {0} должно быть HSL цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "hsla",
-			translation: "{0} должен быть HSLA цветом",
+			translation: "Поле {0} должно быть HSLA цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "e164",
-			translation: "{0} должен быть E.164 formatted phone number",
+			translation: "Поле {0} должно быть E.164 formatted phone number",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "email",
-			translation: "{0} должен быть email адресом",
+			translation: "Поле {0} должно быть email адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "url",
-			translation: "{0} должен быть URL",
+			translation: "Поле {0} должно быть URL",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "uri",
-			translation: "{0} должен быть URI",
+			translation: "Поле {0} должно быть URI",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "base64",
-			translation: "{0} должен быть Base64 строкой",
+			translation: "Поле {0} должно быть Base64 строкой",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "contains",
-			translation: "{0} должен содержать текст '{1}'",
+			translation: "Поле {0} должно содержать текст '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1199,11 +1507,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "containsany",
-			translation: "{0} должен содержать минимум один из символов '{1}'",
+			translation: "Поле {0} должно содержать минимум один из символов '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1214,11 +1528,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "excludes",
-			translation: "{0} не должен содержать текст '{1}'",
+			translation: "Поле {0} не должно содержать текст '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1229,11 +1549,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "excludesall",
-			translation: "{0} не должен содержать символы '{1}'",
+			translation: "Поле {0} не должно содержать символы '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1244,11 +1570,17 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "excludesrune",
-			translation: "{0} не должен содержать '{1}'",
+			translation: "Поле {0} не должно содержать '{1}'",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
 
-				t, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				t, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1259,175 +1591,545 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 		},
 		{
 			tag:         "isbn",
-			translation: "{0} должен быть ISBN номером",
+			translation: "Поле {0} должно быть ISBN номером",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "isbn10",
-			translation: "{0} должен быть ISBN-10 номером",
+			translation: "Поле {0} должно быть ISBN-10 номером",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "isbn13",
-			translation: "{0} должен быть ISBN-13 номером",
+			translation: "Поле {0} должно быть ISBN-13 номером",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "uuid",
-			translation: "{0} должен быть UUID",
+			translation: "Поле {0} должно быть UUID",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "uuid3",
-			translation: "{0} должен быть UUID 3 версии",
+			translation: "Поле {0} должно быть UUID 3 версии",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "uuid4",
-			translation: "{0} должен быть UUID 4 версии",
+			translation: "Поле {0} должно быть UUID 4 версии",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "uuid5",
-			translation: "{0} должен быть UUID 5 версии",
+			translation: "Поле {0} должно быть UUID 5 версии",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ascii",
-			translation: "{0} должен содержать только ascii символы",
+			translation: "Поле {0} должно содержать только ascii символы",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "printascii",
-			translation: "{0} должен содержать только доступные для печати ascii символы",
+			translation: "Поле {0} должно содержать только доступные для печати ascii символы",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "multibyte",
-			translation: "{0} должен содержать мультибайтные символы",
+			translation: "Поле {0} должно содержать мультибайтные символы",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "datauri",
-			translation: "{0} должен содержать Data URI",
+			translation: "Поле {0} должно содержать Data URI",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "latitude",
-			translation: "{0} должен содержать координаты широты",
+			translation: "Поле {0} должно содержать координаты широты",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "longitude",
-			translation: "{0} должен содержать координаты долготы",
+			translation: "Поле {0} должно содержать координаты долготы",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ssn",
-			translation: "{0} должен быть SSN номером",
+			translation: "Поле {0} должно быть SSN номером",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ipv4",
-			translation: "{0} должен быть IPv4 адресом",
+			translation: "Поле {0} должно быть IPv4 адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ipv6",
-			translation: "{0} должен быть IPv6 адресом",
+			translation: "Поле {0} должно быть IPv6 адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ip",
-			translation: "{0} должен быть IP адресом",
+			translation: "Поле {0} должно быть IP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "cidr",
-			translation: "{0} должен содержать CIDR обозначения",
+			translation: "Поле {0} должно содержать CIDR обозначения",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "cidrv4",
-			translation: "{0} должен содержать CIDR обозначения для IPv4 адреса",
+			translation: "Поле {0} должно содержать CIDR обозначения для IPv4 адреса",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "cidrv6",
-			translation: "{0} должен содержать CIDR обозначения для IPv6 адреса",
+			translation: "Поле {0} должно содержать CIDR обозначения для IPv6 адреса",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "tcp_addr",
-			translation: "{0} должен быть TCP адресом",
+			translation: "Поле {0} должно быть TCP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "tcp4_addr",
-			translation: "{0} должен быть IPv4 TCP адресом",
+			translation: "Поле {0} должно быть IPv4 TCP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "tcp6_addr",
-			translation: "{0} должен быть IPv6 TCP адресом",
+			translation: "Поле {0} должно быть IPv6 TCP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "udp_addr",
-			translation: "{0} должен быть UDP адресом",
+			translation: "Поле {0} должно быть UDP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "udp4_addr",
-			translation: "{0} должен быть IPv4 UDP адресом",
+			translation: "Поле {0} должно быть IPv4 UDP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "udp6_addr",
-			translation: "{0} должен быть IPv6 UDP адресом",
+			translation: "Поле {0} должно быть IPv6 UDP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ip_addr",
-			translation: "{0} должен быть распознаваемым IP адресом",
+			translation: "Поле {0} должно быть распознаваемым IP адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ip4_addr",
-			translation: "{0} должен быть распознаваемым IPv4 адресом",
+			translation: "Поле {0} должно быть распознаваемым IPv4 адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "ip6_addr",
-			translation: "{0} должен быть распознаваемым IPv6 адресом",
+			translation: "Поле {0} должно быть распознаваемым IPv6 адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "unix_addr",
-			translation: "{0} должен быть распознаваемым UNIX адресом",
+			translation: "Поле {0} должно быть распознаваемым UNIX адресом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "mac",
-			translation: "{0} должен содержать MAC адрес",
+			translation: "Поле {0} должно содержать MAC адрес",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "unique",
-			translation: "{0} должен содержать уникальные значения",
+			translation: "Поле {0} должно содержать уникальные значения",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "iscolor",
-			translation: "{0} должен быть цветом",
+			translation: "Поле {0} должно быть цветом",
 			override:    false,
+			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
+				fld, _ := ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+				t, err := ut.T(fe.Tag(), fld)
+				if err != nil {
+					return fe.(error).Error()
+				}
+				return t
+			},
 		},
 		{
 			tag:         "oneof",
-			translation: "{0} должен быть одним из [{1}]",
+			translation: "Поле {0} должно быть одним из [{1}]",
 			override:    false,
 			customTransFunc: func(ut ut.Translator, fe validator.FieldError) string {
-				s, err := ut.T(fe.Tag(), fe.Field(), fe.Param())
+
+				var fld string
+				fld, _ = ut.T(fe.Field())
+				if fld == "" {
+					fld = fe.Field()
+				}
+
+				s, err := ut.T(fe.Tag(), fld, fe.Param())
 				if err != nil {
 					log.Printf("warning: error translating FieldError: %#v", fe)
 					return fe.(error).Error()
@@ -1460,6 +2162,12 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			translation: "Пользователь не найден в LDAP",
 			override:    false,
 		},
+		{
+			tag:         "Title",
+			translation: "Название",
+			override:    false,
+		},
+
 	}
 
 	for _, t := range translations {

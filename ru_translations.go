@@ -1435,6 +1435,31 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 				return s
 			},
 		},
+		{
+			tag:         "dateInFuture",
+			translation: "Дата и время не могут быть в прошлом",
+			override:    false,
+		},
+		{
+			tag:         "existedEventsParams",
+			translation: "Недопустимые параметры события",
+			override:    false,
+		},
+		{
+			tag:         "fileAccessType",
+			translation: "Недопустимый тип доступа к файлу",
+			override:    false,
+		},
+		{
+			tag:         "starRating",
+			translation: "Недопустимая оценка",
+			override:    false,
+		},
+		{
+			tag:         "userExistsInLdap",
+			translation: "Пользователь не найден в LDAP",
+			override:    false,
+		},
 	}
 
 	for _, t := range translations {

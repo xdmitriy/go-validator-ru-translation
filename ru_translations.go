@@ -2167,7 +2167,131 @@ func RegisterDefaultTranslations(v *validator.Validate, trans ut.Translator) (er
 			translation: "Название",
 			override:    false,
 		},
-
+		{
+			tag:         "Description",
+			translation: "Описание",
+			override:    false,
+		},
+		{
+			tag:         "FileName",
+			translation: "Имя файла",
+			override:    false,
+		},
+		{
+			tag:         "FileAccess",
+			translation: "Доступ файла",
+			override:    false,
+		},
+		{
+			tag:         "StartAt",
+			translation: "Время начала",
+			override:    false,
+		},
+		{
+			tag:         "EndAt",
+			translation: "Время окончания",
+			override:    false,
+		},
+		{
+			tag:         "EventID",
+			translation: "ID события",
+			override:    false,
+		},
+		{
+			tag:         "UserID",
+			translation: "ID пользователя",
+			override:    false,
+		},
+		{
+			tag:         "Message",
+			translation: "Сообщение",
+			override:    false,
+		},
+		{
+			tag:         "Page",
+			translation: "Страница",
+			override:    false,
+		},
+		{
+			tag:         "Limit",
+			translation: "Лимит",
+			override:    false,
+		},
+		{
+			tag:         "Source",
+			translation: "Источник",
+			override:    false,
+		},
+		{
+			tag:         "ModeratorEmails",
+			translation: "Модераторы",
+			override:    false,
+		},
+		{
+			tag:         "Params",
+			translation: "Параметры",
+			override:    false,
+		},
+		{
+			tag:         "Device",
+			translation: "Устройство",
+			override:    false,
+		},
+		{
+			tag:         "Os",
+			translation: "Операционная система",
+			override:    false,
+		},
+		{
+			tag:         "Browser",
+			translation: "Браузер",
+			override:    false,
+		},
+		{
+			tag:         "Status",
+			translation: "Статус",
+			override:    false,
+		},
+		{
+			tag:         "Link",
+			translation: "Ссылка",
+			override:    false,
+		},
+		{
+			tag:         "ScheduleID",
+			translation: "ID расписания",
+			override:    false,
+		},
+		{
+			tag:         "City",
+			translation: "Город",
+			override:    false,
+		},
+		{
+			tag:         "Rating",
+			translation: "Оценка",
+			override:    false,
+		},
+		{
+			tag:         "Type",
+			translation: "Тип",
+			override:    false,
+		},
+		{
+			tag:         "Login",
+			translation: "Логин",
+			override:    false,
+		},
+		{
+			tag:         "Password",
+			translation: "Пароль",
+			override:    false,
+		},
+		{
+			tag:         "ParticipantsEmails",
+			translation: "Спикеры",
+			override:    false,
+		},
 	}
 
 	for _, t := range translations {
